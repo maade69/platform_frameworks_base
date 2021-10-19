@@ -493,7 +493,7 @@ public final class TimeDetectorStrategyImpl implements TimeDetectorStrategy {
                             + ", networkSuggestion=" + networkSuggestion
                             + ", detectionReason=" + detectionReason;
                 }
-            } else if (origin == ORIGIN_GNSS) {
+            } else if (mEnvironment.isNITZTimeDetectionEnabled() && origin == ORIGIN_GNSS) {
                 GnssTimeSuggestion gnssTimeSuggestion = findLatestValidGnssSuggestion();
                 if (gnssTimeSuggestion != null) {
                     newUnixEpochTime = gnssTimeSuggestion.getUnixEpochTime();
