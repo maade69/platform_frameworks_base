@@ -41,6 +41,7 @@ import android.annotation.SystemService;
 import android.annotation.TestApi;
 import android.annotation.WorkerThread;
 import android.app.PendingIntent;
+import android.app.compat.gms.GmsCompat;
 import android.app.role.RoleManager;
 import android.compat.Compatibility;
 import android.compat.annotation.ChangeId;
@@ -106,6 +107,7 @@ import android.util.Pair;
 
 import com.android.internal.annotations.GuardedBy;
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.gmscompat.sysservice.GmcTelephonyManager;
 import com.android.internal.os.BackgroundThread;
 import com.android.internal.telephony.CellNetworkScanResult;
 import com.android.internal.telephony.IBooleanConsumer;
@@ -573,7 +575,7 @@ public class TelephonyManager {
      */
     public TelephonyManager createForSubscriptionId(int subId) {
       // Don't reuse any TelephonyManager objects.
-      return new TelephonyManager(mContext, subId);
+      return GmsCompat.isEnabled() ? new GmcTelephonyManager(mContext, subId) : new TelephonyManager(mContext, subId);
     }
 
     /**
@@ -589,7 +591,7 @@ public class TelephonyManager {
         if (!SubscriptionManager.isValidSubscriptionId(subId)) {
             return null;
         }
-        return new TelephonyManager(mContext, subId);
+        return GmsCompat.isEnabled() ? new GmcTelephonyManager(mContext, subId) : new TelephonyManager(mContext, subId);
     }
 
     /** {@hide} */
