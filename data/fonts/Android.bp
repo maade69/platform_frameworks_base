@@ -43,6 +43,10 @@ prebuilt_font {
     name: "AndroidClock.ttf",
     src: "AndroidClock.ttf",
 }
+prebuilt_font {
+    name: "GoogleSansClock-Regular.ttf",
+    src: "GoogleSansClock-Regular.ttf",
+}
 
 /////////////////////////////////
 // Copies the font configuration file into system/etc for the product as fonts.xml.

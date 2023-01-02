@@ -1542,4 +1542,7 @@
             <axis tag="wght" stylevalue="700"/>
         </font>
     </family>
+    <family name="google-sans-clock">
+        <font>GoogleSansClock-Regular.ttf</font>
+    </family>
 </familyset>
