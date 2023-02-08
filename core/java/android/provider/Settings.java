@@ -17319,6 +17319,12 @@ public final class Settings {
         public static final String BLUETOOTH_OFF_TIMEOUT = "bluetooth_off_timeout";
 
         /**
+         * Whether SUPL is enabled 
+         * @hide       
+         */
+        public static final String SUPL_ENABLED = "supl_enabled";
+
+        /**
          * Settings migrated from Wear OS settings provider.
          * @hide
          */

@@ -35,6 +35,7 @@ import android.net.ipsec.ike.SaProposal;
 import android.os.Build;
 import android.os.PersistableBundle;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.service.carrier.CarrierService;
 import android.telecom.TelecomManager;
 import android.telephony.AccessNetworkConstants.AccessNetworkType;
@@ -4710,16 +4711,28 @@ public class CarrierConfigManager {
         public static final String KEY_ES_SUPL_DATA_PLANE_ONLY_ROAMING_PLMN_STRING_ARRAY =
                 KEY_PREFIX + "es_supl_data_plane_only_roaming_plmn_string_array";
 
-        private static PersistableBundle getDefaults() {
+        static final int SUPL_ENABLED_DEFAULT = 1;
+        private static PersistableBundle getDefaults(Context mContext) {
             PersistableBundle defaults = new PersistableBundle();
-            defaults.putBoolean(KEY_PERSIST_LPP_MODE_BOOL, true);
-            defaults.putString(KEY_SUPL_HOST_STRING, "supl.google.com");
-            defaults.putString(KEY_SUPL_PORT_STRING, "7275");
-            defaults.putString(KEY_SUPL_VER_STRING, "0x20000");
-            defaults.putString(KEY_SUPL_MODE_STRING, "1");
-            defaults.putString(KEY_SUPL_ES_STRING, "1");
-            defaults.putString(KEY_LPP_PROFILE_STRING, "2");
-            defaults.putString(KEY_USE_EMERGENCY_PDN_FOR_EMERGENCY_SUPL_STRING, "1");
+            if (Settings.Global.getInt(mContext.getContentResolver(),Settings.Global.SUPL_ENABLED,
+                        SUPL_ENABLED_DEFAULT) == SUPL_ENABLED_DEFAULT) {
+                defaults.putBoolean(KEY_PERSIST_LPP_MODE_BOOL, true);
+                defaults.putString(KEY_SUPL_HOST_STRING, "supl.google.com");
+                defaults.putString(KEY_SUPL_PORT_STRING, "7275");
+                defaults.putString(KEY_SUPL_MODE_STRING, "1");
+                defaults.putString(KEY_SUPL_ES_STRING, "1");
+                defaults.putString(KEY_LPP_PROFILE_STRING, "2");
+                defaults.putString(KEY_USE_EMERGENCY_PDN_FOR_EMERGENCY_SUPL_STRING, "1");
+            } else {
+                defaults.putBoolean(KEY_PERSIST_LPP_MODE_BOOL, false);
+                defaults.putString(KEY_SUPL_HOST_STRING, "");
+                defaults.putString(KEY_SUPL_PORT_STRING, "");
+                defaults.putString(KEY_SUPL_MODE_STRING, "0");
+                defaults.putString(KEY_SUPL_ES_STRING, "0");
+                defaults.putString(KEY_LPP_PROFILE_STRING, "0");
+                defaults.putString(KEY_USE_EMERGENCY_PDN_FOR_EMERGENCY_SUPL_STRING, "0");
+            }
+            defaults.putString(KEY_SUPL_VER_STRING, "0x20000"); /** supl_ver is usually defined by the carrier  */
             defaults.putString(KEY_A_GLONASS_POS_PROTOCOL_SELECT_STRING, "0");
             defaults.putString(KEY_GPS_LOCK_STRING, "3");
             defaults.putString(KEY_ES_EXTENSION_SEC_STRING, "0");
@@ -8596,6 +8609,8 @@ public class CarrierConfigManager {
     /** The default value for every variable. */
     private final static PersistableBundle sDefaults;
 
+    private static Context context;
+
     static {
         sDefaults = new PersistableBundle();
         sDefaults.putString(KEY_CARRIER_CONFIG_VERSION_STRING, "");
@@ -9134,7 +9149,7 @@ public class CarrierConfigManager {
                 KEY_OPPORTUNISTIC_TIME_TO_SCAN_AFTER_CAPABILITY_SWITCH_TO_PRIMARY_LONG,
                 120000L);
         sDefaults.putAll(ImsServiceEntitlement.getDefaults());
-        sDefaults.putAll(Gps.getDefaults());
+        sDefaults.putAll(Gps.getDefaults(context));
         sDefaults.putIntArray(KEY_CDMA_ENHANCED_ROAMING_INDICATOR_FOR_HOME_NETWORK_INT_ARRAY,
                 new int[] {
                         1 /* Roaming Indicator Off */
