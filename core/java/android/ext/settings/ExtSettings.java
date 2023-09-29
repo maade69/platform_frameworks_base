@@ -14,6 +14,8 @@ import static android.ext.settings.GnssConstants.SUPL_SERVER_GRAPHENEOS_PROXY;
 import static android.ext.settings.GnssConstants.SUPL_SERVER_STANDARD;
 import static android.ext.settings.RemoteProvisioningConstants.GRAPHENEOS_PROXY;
 import static android.ext.settings.RemoteProvisioningConstants.STANDARD_SERVER;
+import static android.ext.settings.WidevineProvisioningConstants.WV_GRAPHENEOS_PROXY;
+import static android.ext.settings.WidevineProvisioningConstants.WV_STANDARD_SERVER;
 
 /** @hide */
 public class ExtSettings {
@@ -125,6 +127,12 @@ public class ExtSettings {
     public static final BoolSysProperty NATIVE_DEBUGGING = new BoolSysProperty(
             "persist.native_debug", true);
 
+    public static final IntSetting WIDEVINE_PROVISIONING_SERVER = new IntSetting(
+            Setting.Scope.GLOBAL, "widevine_provisioner_server", // historical setting key
+            WV_GRAPHENEOS_PROXY, // default
+            WV_STANDARD_SERVER, WV_GRAPHENEOS_PROXY // valid values
+    ); 
+   
     private ExtSettings() {}
 
     // used for making settings defined in this class unreadable by third-party apps
